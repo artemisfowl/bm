@@ -8,6 +8,7 @@
 
 # standard libs/modules
 from sys import version_info
+from argparse import ArgumentParser
 
 # custom libs/modules
 from .constants import PY_VER_MAJOR, PY_VER_MINOR
@@ -42,10 +43,15 @@ def panic(errno: int):
 	# if the error number is found, print the message set up
 	print(errtab.get(errno))
 
-def parse_cli_args():
+def parse_cli_args() -> bool:
 	"""
 		@function parse_cli_args
 		@brief Function to parse the CLI arguments and set up the flags
-		@return None
+		@return Returns True if debug enabled else returns False
 	"""
-	return
+	# will only be setting up the debug flag as of now
+	_argparser = ArgumentParser()
+	_argparser.add_argument("--debug", "-d", action="store_true")
+
+	_args = _argparser.parse_args()
+	return vars(_args).get("debug")

@@ -12,7 +12,7 @@
 # standard libs/imports
 
 # custom libs/modules
-from util.commons import chk_pyver, panic
+from util.commons import chk_pyver, panic, parse_cli_args
 from util.errtab import errtab
 
 def main() -> int:
@@ -26,6 +26,11 @@ def main() -> int:
 		panic(errno=errno)
 
 	# now parse the CLI arguments
+	if not parse_cli_args():
+		print("Debug not set")
+	else:
+		print("Debugging enabled")
+
 	return 0
 
 if __name__ == "__main__":
