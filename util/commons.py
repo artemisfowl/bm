@@ -154,7 +154,7 @@ def log(msg: str, msg_type: str):
 	if flags.getdbgstatus():
 		frame = stack()[2]								# type: ignore
 		filename = frame.filename[frame.filename.rfind(sep)+1:]
-		print(f"{datetime.now()} :: {msg_type} => {filename}[{frame.lineno}] : {msg}")
+		print(f"{datetime.now()} :: {msg_type} => {filename}[{frame.function}, {frame.lineno}] : {msg}")
 
 		if flags.getlogfpath() is not None:
 			with open(flags.getlogfpath(), "a", encoding="utf-8") as lfile: # type: ignore
