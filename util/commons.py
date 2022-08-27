@@ -85,7 +85,8 @@ def panic(errno: int):
 		@return None
 	"""
 
-	if errno not in set(errtab.keys()):
+	errkeys = [key for key, _ in errtab.items()]
+	if errno not in set(errkeys):
 		raise UnknownErrorNumberError(message="Unknown Error Number",
 				errors=[])
 
@@ -104,11 +105,22 @@ def parse_cli_args():
 			help="Enable debug logs", action="store_true")
 	_argparser.add_argument("--log", "-l",
 			help="Specify output log filepath", type=str)
+	_argparser.add_argument("--config", "-c",
+			help="Specify the configuration file path", type=str)
 
 	_args = _argparser.parse_args()
 	flags.set(
-			isdebugenabled=vars(_args).get("debug"),
-			logfpath=vars(_args).get("log"))
+			isdebugenabled=vars(_args).get("debug"),	# type: ignore
+			logfpath=vars(_args).get("log"))			# type: ignore
+
+def parse_config_file():
+	"""
+		@function parse_config_file
+		@brief Function to parse the configuration file and set up the values
+	"""
+	# first check if the configuration file along with the entire path is
+	# present or not
+	pass
 
 def log(msg: str, msg_type: str):
 	"""
@@ -126,7 +138,7 @@ def log(msg: str, msg_type: str):
 		print(f"{datetime.now()} :: {msg_type} : {msg}")
 
 		if flags.getlogfpath() is not None:
-			with open(flags.getlogfpath(), "a") as lfile:
+			with open(flags.getlogfpath(), "a", encoding="utf-8") as lfile: # type: ignore
 				# append the newline since this is writing to the file
 				lfile.write(f"{datetime.now()} :: {msg_type} : {msg}\n")
 
