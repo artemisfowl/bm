@@ -23,9 +23,9 @@ class MessageType(Enum):
 		@class MessageType
 		@brief Enumeration class containing the symbols for Message types
 	"""
-	INFO = "\u24BE"
-	DEBUG = "\u24cc"
-	ERR = "\u24ba"
+	INFO = "INFO"
+	WARN = "WARN"
+	XERR = "XERR"
 
 class Flags:
 	"""
@@ -146,8 +146,8 @@ def log(msg: str, msg_type: str):
 def info(msg: str):
 	log(msg=msg, msg_type=MessageType.INFO.value)
 
-def debug(msg: str):
-	log(msg=msg, msg_type=MessageType.DEBUG.value)
+def warn(msg: str):
+	log(msg=msg, msg_type=MessageType.WARN.value)
 
 def error(msg: str):
-	log(msg=msg, msg_type=MessageType.ERR.value)
+	log(msg=msg, msg_type=MessageType.XERR.value)
