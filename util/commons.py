@@ -7,12 +7,14 @@
 """
 
 # standard libs/modules
+from os import sep
 from sys import version_info
 from argparse import ArgumentParser
 from datetime import datetime
 from enum import Enum
 from typing import Union
 from pathlib import Path
+from inspect import stack
 
 # custom libs/modules
 from .constants import PY_VER_MAJOR, PY_VER_MINOR, CONFIG_FILE_PATH
@@ -150,7 +152,9 @@ def log(msg: str, msg_type: str):
 	msg_type = MessageType.INFO.value if msg_type is None else msg_type
 
 	if flags.getdbgstatus():
-		print(f"{datetime.now()} :: {msg_type} : {msg}")
+		frame = stack()[2]								# type: ignore
+		filename = frame.filename[frame.filename.rfind(sep)+1:]
+		print(f"{datetime.now()} :: {msg_type} => {filename}[{frame.lineno}] : {msg}")
 
 		if flags.getlogfpath() is not None:
 			with open(flags.getlogfpath(), "a", encoding="utf-8") as lfile: # type: ignore
