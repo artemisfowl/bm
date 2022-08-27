@@ -7,7 +7,7 @@
 """
 
 # standard libs/modules
-from os import sep
+from os import makedirs, sep, environ
 from sys import version_info
 from argparse import ArgumentParser
 from datetime import datetime
@@ -15,6 +15,7 @@ from enum import Enum
 from typing import Union
 from pathlib import Path
 from inspect import stack
+from configparser import ConfigParser
 
 # custom libs/modules
 from .constants import PY_VER_MAJOR, PY_VER_MINOR, CONFIG_FILE_PATH
@@ -41,7 +42,7 @@ class Flags:
 		self._logfpath = None				# log filepath
 		self._confpath = None				# configuration file path
 
-	def set(self, isdebugenabled: bool, logfpath: str, confpath: str = CONFIG_FILE_PATH):
+	def set(self, isdebugenabled: bool, logfpath: str, confpath: str):
 		"""
 			@function set
 			@brief Function to set the flags and configurations
@@ -49,7 +50,7 @@ class Flags:
 		"""
 		self._isdebugenabled = isdebugenabled
 		self._logfpath = logfpath
-		self._confpath = confpath
+		self._confpath = confpath if confpath is not None and len(confpath) > 1 else CONFIG_FILE_PATH
 
 	def getdbgstatus(self) -> bool:
 		"""
@@ -124,19 +125,30 @@ def parse_cli_args():
 	_args = _argparser.parse_args()
 	flags.set(
 			isdebugenabled=vars(_args).get("debug"),	# type: ignore
-			logfpath=vars(_args).get("log"))			# type: ignore
+			logfpath=vars(_args).get("log"),			# type: ignore
+			confpath=vars(_args).get("config"))			# type: ignore
 
 def parse_config_file():
 	"""
 		@function parse_config_file
 		@brief Function to parse the configuration file and set up the values
 	"""
+	info(f"Starting to parse the configuration file : {flags.getconfigpath()}")
 	if not Path(flags.getconfigpath()).exists():		# type: ignore
-		_cpath = Path(flags.getconfigpath())			# type: ignore
-		_cpath.parent.mkdir(exist_ok=True, parents=True)
+		warn(f"Configuration file : {flags.getconfigpath()} not present")
+		_dirs = flags.getconfigpath()[:flags.getconfigpath().rfind(sep)]		# type: ignore
+		if _dirs.startswith("~"):
+			info("Resolving directory path issue with ~")
+			_dirs = _dirs.replace("~", environ["HOME"])
+			warn(f"Directory path after ~ resolution : {_dirs}")
+		info(f"Creating configuration directory path : {_dirs}")
+		makedirs(_dirs, exist_ok=True)
+		#fixme: create the configuration file and write the default configuration
 
 	# now that the configuration file is already present - let's open the same
 	# and parse the output of the same and then update the Configuration class
+	parser = ConfigParser()
+	parser.read(flags.getconfigpath())					# type: ignore
 
 
 def log(msg: str, msg_type: str):
