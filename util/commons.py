@@ -129,11 +129,12 @@ def parse_config_file():
 		@function parse_config_file
 		@brief Function to parse the configuration file and set up the values
 	"""
-	# first check if the configuration file along with the entire path is
-	# present or not
 	if not Path(flags.getconfigpath()).exists():		# type: ignore
 		_cpath = Path(flags.getconfigpath())			# type: ignore
 		_cpath.parent.mkdir(exist_ok=True, parents=True)
+
+	# now that the configuration file is already present - let's open the same
+	# and parse the output of the same and then update the Configuration class
 
 
 def log(msg: str, msg_type: str):
