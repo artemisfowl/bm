@@ -11,6 +11,8 @@ from sys import version_info
 from argparse import ArgumentParser
 from datetime import datetime
 from enum import Enum
+from typing import Union
+from pathlib import Path
 
 # custom libs/modules
 from .constants import PY_VER_MAJOR, PY_VER_MINOR, CONFIG_FILE_PATH
@@ -35,9 +37,9 @@ class Flags:
 	def __init__(self):
 		self._isdebugenabled = False		# debugging enabled/disabled
 		self._logfpath = None				# log filepath
-		self._confpath = CONFIG_FILE_PATH	# configuration file path
+		self._confpath = None				# configuration file path
 
-	def set(self, isdebugenabled: bool, logfpath: str):
+	def set(self, isdebugenabled: bool, logfpath: str, confpath: str = CONFIG_FILE_PATH):
 		"""
 			@function set
 			@brief Function to set the flags and configurations
@@ -45,6 +47,7 @@ class Flags:
 		"""
 		self._isdebugenabled = isdebugenabled
 		self._logfpath = logfpath
+		self._confpath = confpath
 
 	def getdbgstatus(self) -> bool:
 		"""
@@ -54,13 +57,21 @@ class Flags:
 		"""
 		return self._isdebugenabled
 
-	def getlogfpath(self):
+	def getlogfpath(self) -> Union[None, str]:
 		"""
 			@function getlogfpath
 			@brief Function to get the log filepath set
-			@return None
+			@return Returns the log file path
 		"""
 		return self._logfpath
+
+	def getconfigpath(self) -> Union[None, str]:
+		"""
+			@function getconfigpath
+			@brief Function to get the configuration file path set
+			@return Returns the string to the configuration file path
+		"""
+		return self._confpath
 
 flags = Flags()
 
@@ -120,7 +131,10 @@ def parse_config_file():
 	"""
 	# first check if the configuration file along with the entire path is
 	# present or not
-	pass
+	if not Path(flags.getconfigpath()).exists():		# type: ignore
+		_cpath = Path(flags.getconfigpath())			# type: ignore
+		_cpath.parent.mkdir(exist_ok=True, parents=True)
+
 
 def log(msg: str, msg_type: str):
 	"""
