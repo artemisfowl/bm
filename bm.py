@@ -12,7 +12,8 @@
 # standard libs/imports
 
 # custom libs/modules
-from util.commons import chk_pyver, panic, parse_cli_args, info
+from util.commons import chk_pyver, panic, parse_cli_args, info, warn
+from notifier.batterynotifier import BatteryNotifier
 
 def main() -> int:
 	"""
@@ -25,8 +26,12 @@ def main() -> int:
 		panic(errno=errno)
 
 	parse_cli_args()
+	info("Starting BatteryNotifier version 1")
 
-	info(msg="Debugging is enabled")
+	warn(msg="Debugging is enabled")
+	with BatteryNotifier() as batterynotifier:
+		info("Calling notify")
+		batterynotifier.notify()
 
 	return 0
 

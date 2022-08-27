@@ -47,3 +47,12 @@ class BatteryNotifier:
 		error(f"Exception type details : {type(exc_type)}")
 		error(f"Exception value : {type(exc_val)}")
 		error(f"Exception traceback : {type(exc_tb)}")
+
+	def notify(self) -> int:
+		"""
+			@function notify
+			@brief Function to notify the user about the status of the system battery
+			@return Returns an error code based on the issue that is faced while notifying. 0 on success
+		"""
+		info("Notify service is starting")
+		return 0
