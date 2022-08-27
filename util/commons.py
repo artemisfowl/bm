@@ -51,7 +51,8 @@ def parse_cli_args() -> bool:
 	"""
 	# will only be setting up the debug flag as of now
 	_argparser = ArgumentParser()
-	_argparser.add_argument("--debug", "-d", action="store_true")
+	_argparser.add_argument("--debug", "-d",
+			help="Enable debug logs", action="store_true")
 
 	_args = _argparser.parse_args()
 	return vars(_args).get("debug")
