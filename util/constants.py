@@ -10,3 +10,6 @@
 # Python version related
 PY_VER_MAJOR = 3
 PY_VER_MINOR = 8
+
+# Configuration filepath default location
+CONFIG_FILE_PATH = "~/.config/batterymonitor/config.ini"

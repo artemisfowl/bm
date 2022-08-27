@@ -13,7 +13,7 @@ from datetime import datetime
 from enum import Enum
 
 # custom libs/modules
-from .constants import PY_VER_MAJOR, PY_VER_MINOR
+from .constants import PY_VER_MAJOR, PY_VER_MINOR, CONFIG_FILE_PATH
 from .errtab import errtab
 from .exceptions import UnknownErrorNumberError
 
@@ -28,11 +28,14 @@ class MessageType(Enum):
 	ERR = "\u24ba"
 
 class Flags:
+	"""
+		@class Flags
+		@brief Class containing the flags and values to be used by the program
+	"""
 	def __init__(self):
-		self._isdebugenabled = False
-
-		# write the logs to the file if filepath is not None
-		self._logfpath = None
+		self._isdebugenabled = False		# debugging enabled/disabled
+		self._logfpath = None				# log filepath
+		self._confpath = CONFIG_FILE_PATH	# configuration file path
 
 	def set(self, isdebugenabled: bool, logfpath: str):
 		"""
