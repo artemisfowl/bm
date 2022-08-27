@@ -12,7 +12,7 @@
 # standard libs/imports
 
 # custom libs/modules
-from util.commons import chk_pyver, panic, parse_cli_args
+from util.commons import chk_pyver, panic, parse_cli_args, info
 
 def main() -> int:
 	"""
@@ -24,11 +24,9 @@ def main() -> int:
 	if errno:
 		panic(errno=errno)
 
-	# now parse the CLI arguments
-	if parse_cli_args():
-		print("Debugging enabled")
-		# if the debugging is enabled, now call the function to setup the
-		# logging facility - custom logging, no inbuilt logging module bullshit
+	parse_cli_args()
+
+	info(msg="Debugging is enabled")
 
 	return 0
 
