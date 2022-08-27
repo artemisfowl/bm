@@ -6,6 +6,9 @@
 	@bug No known bugs
 """
 
+# custom libs/modules
+from util.commons import info, warn, error
+
 class BatteryNotifier:
 	"""
 		@class BatteryNotifier
@@ -13,6 +16,11 @@ class BatteryNotifier:
 		@note This class will be a context manager - so the usage will contain 'with' statement
 	"""
 	def __init__(self) -> None:
+		"""
+			@function __init__
+			@brief Default constructor for BatteryNotifier class, sets value of member variables
+			@return None
+		"""
 		# battery related
 		self._plugged_status = None
 		self._battery = None
@@ -21,13 +29,21 @@ class BatteryNotifier:
 		self._notify_once = False
 		self._toast_master = None
 
+	#fixme: Remove linter warning on providing the value of BatteryNotifier
 	def __enter__(self):
+		"""
+			@function __enter__
+			@brief Function to be executed when context manager is initialized
+			@return Returns a reference to the current object of BatteryNotifier
+		"""
+		info("Starting context manager")
+		warn("Returning a reference to self")
 		return self
 
-	#fixme: need to specify the type of the variables
+	#fixme: need to specify the type of the parameters
 	def __exit__(self, exc_type, exc_val, exc_tb):
+		info("Exiting context manager")
 		# check the type and then update the information of the parameters in the function signature
-		print(type(exc_type))
-		print(type(exc_val))
-		print(type(exc_tb))
-		pass
+		error(f"Exception type details : {type(exc_type)}")
+		error(f"Exception value : {type(exc_val)}")
+		error(f"Exception traceback : {type(exc_tb)}")
