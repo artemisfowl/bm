@@ -142,9 +142,9 @@ def parse_cli_args():
 
 	_args = _argparser.parse_args()
 	flags.set(
-			isdebugenabled=vars(_args).get("debug"),	# type: ignore
-			logfpath=vars(_args).get("log"),			# type: ignore
-			confpath=vars(_args).get("config"))			# type: ignore
+			isdebugenabled=vars(_args).get("debug"),								# type: ignore
+			logfpath=vars(_args).get("log"),										# type: ignore
+			confpath=vars(_args).get("config"))										# type: ignore
 
 def parse_config_file() -> Union[None, ConfigParser]:
 
@@ -156,13 +156,13 @@ def parse_config_file() -> Union[None, ConfigParser]:
 
 	info(f"Starting to parse the configuration file : {flags.getconfigpath()}")
 	parser = ConfigParser()
-	_dirs = flags.getconfigpath()[:flags.getconfigpath().rfind(sep)]		# type: ignore
+	_dirs = flags.getconfigpath()[:flags.getconfigpath().rfind(sep)]				# type: ignore
 	if _dirs.startswith("~"):
 		info("Resolving directory path issue with ~")
 		_dirs = _dirs.replace("~", environ["HOME"])
 		warn(f"Directory path after ~ resolution : {_dirs}")
 
-	if not Path(_dirs).exists():		# type: ignore
+	if not Path(_dirs).exists():													# type: ignore
 		warn(f"Configuration file : {flags.getconfigpath()} not present")
 		info(f"Creating configuration directory path : {_dirs}")
 		makedirs(_dirs, exist_ok=True)
@@ -179,15 +179,15 @@ def parse_config_file() -> Union[None, ConfigParser]:
 		_dirs = f"{_dirs}{sep}"\
 				f"{flags.getconfigpath()[flags.getconfigpath().rfind(sep)+1:]}"		# type: ignore
 		warn(f"Creating configuration file : {_dirs}")
-		with open(_dirs, "w", encoding="utf-8") as inifile:		# type: ignore
+		with open(_dirs, "w", encoding="utf-8") as inifile:							# type: ignore
 			parser.write(inifile)
 
 		return parser
-	else:
-		info("Configuration file found, parsing and loading data from it")
-		parser.read(flags.getconfigpath())					# type: ignore
 
-		return parser
+	info("Configuration file found, parsing and loading data from it")
+	parser.read(flags.getconfigpath())												# type: ignore
+
+	return parser
 
 
 def log(msg: str, msg_type: str):
@@ -205,12 +205,12 @@ def log(msg: str, msg_type: str):
 	msg_type = MessageType.INFO.value if msg_type is None else msg_type
 
 	if flags.getdbgstatus():
-		frame = stack()[2]								# type: ignore
+		frame = stack()[2]															# type: ignore
 		filename = frame.filename[frame.filename.rfind(sep)+1:]
 		print(f"{datetime.now()} :: {msg_type} => {filename}[{frame.function}, {frame.lineno}] : {msg}")
 
 		if flags.getlogfpath() is not None:
-			with open(flags.getlogfpath(), "a", encoding="utf-8") as lfile: # type: ignore
+			with open(flags.getlogfpath(), "a", encoding="utf-8") as lfile:			# type: ignore
 				# append the newline since this is writing to the file
 				lfile.write(f"{datetime.now()} :: {msg_type} : {msg}\n")
 
