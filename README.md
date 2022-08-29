@@ -23,6 +23,6 @@ made to work with MinGW. Process for checking the status of the battery is alrea
 works for both Windows and Linux, however sending out notification in Windows was an issue.
 While trying to find a library which would be able to handle both and not be as bulky as Qt, Python
 presented an easier solution to the same.
-2. *Single library to show the notifications* : Despite using Python, there is not single library with which
-a notification can be shown in Windows as well as in Linux. Hence the platform specific code has to be put
+2. *Single library to show the notifications* : Despite using Python, there is no single library with which
+a notification can be shown in Windows as well as in Linux. Hence the platform specific code had to be put
 in for importing the right module and setting up the toast master with the right notification handler
