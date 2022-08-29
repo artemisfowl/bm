@@ -107,13 +107,13 @@ def chk_pyver() -> int:
 	# remember that -10 is for Python version mismatch, refer to errtab
 	return -10
 
-def panic(errno: int):
+def panic(errno: int) -> int:
 
 	"""
 		@function panic
 		@brief Function to check the value of errno from the errtab and raise
 		an exception accordingly
-		@return None
+		@return Returns the error number provided
 	"""
 
 	errkeys = [key for key, _ in errtab.items()]
@@ -123,6 +123,7 @@ def panic(errno: int):
 
 	# if the error number is found, print the message set up
 	print(errtab.get(errno))
+	return errno
 
 def parse_cli_args():
 

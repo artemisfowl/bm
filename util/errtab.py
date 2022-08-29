@@ -7,5 +7,7 @@
 """
 
 errtab = {
-		-10: "Python version mismatch"
+		-10: "Python version mismatch",
+		# Battery notifier - error numbers
+		-100: "Unable to set toast master, check platform specific imports"
 }

@@ -23,7 +23,7 @@ def main() -> int:
 	"""
 	errno = chk_pyver()
 	if errno:
-		panic(errno=errno)
+		return panic(errno=errno)
 
 	parse_cli_args()
 	info("Starting BatteryNotifier version 1")
