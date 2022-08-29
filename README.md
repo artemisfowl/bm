@@ -11,5 +11,12 @@ In order to write the Proof Of Concept program, the choice of language was Pytho
 with C and C++, however the requirement of extensive libraries and the amount of time at hand forced me to
 use Python.
 
+In short, the aim was to create a program which would perform the following operations properly:
+- Check the status of the battery in both Windows and Linux
+- Send out a notification in both Windows and Linux
+- Keep monitoring the status of the battery based on the user's specification
+
 ### Problems faced and the respective solutions
-1. Show notifications in Windows 10+ OS(s)
+1. *Show notifications in Windows 10+ OS(s)* : Showing the notifications in Windows operating system was
+posing problems in Windows. This was the primary reason why the choice of language was later made to be
+Python.
