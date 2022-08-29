@@ -186,7 +186,9 @@ def parse_config_file() -> Union[None, ConfigParser]:
 		return parser
 
 	info("Configuration file found, parsing and loading data from it")
-	parser.read(flags.getconfigpath())												# type: ignore
+	_dirs = f"{_dirs}{sep}"\
+			f"{flags.getconfigpath()[flags.getconfigpath().rfind(sep)+1:]}"			# type: ignore
+	parser.read(_dirs)												# type: ignore
 
 	return parser
 

@@ -9,6 +9,7 @@
 # standard libs/imports
 from platform import system
 from typing import Union
+from time import sleep
 
 # custom libs/modules
 from util.commons import info, warn, error, panic
@@ -42,7 +43,7 @@ class BatteryNotifier:
 
 		# battery related
 		self._plugged_status = None
-		self._battery = sensors_battery()
+		self._battery = None
 
 		# notification related
 		self._notify_once = False
@@ -72,9 +73,9 @@ class BatteryNotifier:
 
 		info("Exiting context manager")
 		# check the type and then update the information of the parameters in the function signature
-		error(f"Exception type details : {type(exc_type)}")
-		error(f"Exception value : {type(exc_val)}")
-		error(f"Exception traceback : {type(exc_tb)}")
+		error(f"Exception details : {exc_type}")
+		error(f"Exception value : {exc_val}")
+		error(f"Exception traceback : {exc_tb}")
 
 	def _setup_notifier(self) -> int:
 
@@ -100,7 +101,38 @@ class BatteryNotifier:
 
 		return 0
 
-	def notify(self) -> Union[None, int]:
+	def _show_msg(self, msg: str, icon: str, duration: int) -> int:
+
+		"""
+			@function _show_msg
+			@brief Function to show the battery status message as a notification
+			@return Returns 0 on success, -1xxx series of error number on failure
+		"""
+
+		if msg is None or len(msg) == 0:
+			return -1001
+
+		if icon is None or len(icon) == 0:
+			return -1002
+
+		if duration is None or not isinstance(duration, int):
+			return -1003
+
+		# check the system and then setup the message information
+		if system().lower() == "windows":
+			info("Setting up notification for Windows platform")
+			self._toast_master.show_toast(self._plugged_status, msg,
+					icon_path=icon, duration=duration, threaded=True) # thread should always be set for Windows
+		elif system().lower() == "linux":
+			info("Setting up notification for Linux platform")
+			self._toast_master.set_image_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file(icon))
+			self._toast_master.update(self._plugged_status, msg)
+			self._toast_master.show()
+
+		return 0
+
+	def notify(self,
+			chk_battery_percent:int, polling_frequency: float, toast_duration: int) -> Union[None, int]:
 
 		"""
 			@function notify
@@ -113,9 +145,28 @@ class BatteryNotifier:
 		errno = self._setup_notifier()
 		if errno:
 			return panic(errno=errno)
+		self._battery = sensors_battery()
 		self._notify_once = not self._battery.power_plugged
 
 		while True:
 			#fixme: add the code for showing the notification
 			self._battery = sensors_battery()
 			self._plugged_status = "Plugged In" if self._battery.power_plugged else "Discharging"
+
+			if self._battery.power_plugged:
+				if not self._notify_once:
+					self._show_msg(msg=f"Battery : {self._battery.percent}%",
+							icon="./icons/charging_battery.ico",
+							duration=toast_duration)
+					self._notify_once = True
+			else:
+				if self._notify_once:
+					self._show_msg(msg=f"Battery : {self._battery.percent}%",
+							icon="./icons/discharging_battery.ico",
+							duration=toast_duration)
+					self._notify_once = False
+				else:
+					if self._battery.percent <= chk_battery_percent:
+						self._show_msg(msg=f"Battery : {self._battery.percent}%",
+								icon="./icons/30_battery.ico", duration=toast_duration)
+			sleep(polling_frequency)

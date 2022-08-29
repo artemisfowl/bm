@@ -13,6 +13,7 @@
 
 # custom libs/modules
 from util.commons import chk_pyver, panic, parse_cli_args, info, warn, parse_config_file
+from util.constants import NOTIFICATION_SECTION, MIN_BAT_PERCENT_OPTION, POLLING_FREQ, NOTIFY_DURATION
 from notifier.batterynotifier import BatteryNotifier
 
 def main() -> int:
@@ -30,10 +31,16 @@ def main() -> int:
 
 	warn(msg="Debugging is enabled")
 	info("Parse the configuration file")
-	parse_config_file()
+	confdata = parse_config_file()
+	warn(f"Minimum battery percent check : {int(confdata.get(NOTIFICATION_SECTION, MIN_BAT_PERCENT_OPTION))}")
+	warn(f"Polling frequency : {int(confdata.get(NOTIFICATION_SECTION, POLLING_FREQ))}")
+	warn(f"Notification message duration : {int(confdata.get(NOTIFICATION_SECTION, NOTIFY_DURATION))}")
 	with BatteryNotifier() as batterynotifier:
 		info("Calling notify")
-		batterynotifier.notify()
+		batterynotifier.notify(
+				chk_battery_percent=int(confdata.get(NOTIFICATION_SECTION, MIN_BAT_PERCENT_OPTION)),
+				polling_frequency=float(confdata.get(NOTIFICATION_SECTION, POLLING_FREQ)),
+				toast_duration=int(confdata.get(NOTIFICATION_SECTION, NOTIFY_DURATION)))
 
 	return 0
 
