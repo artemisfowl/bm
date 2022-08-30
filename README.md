@@ -34,6 +34,10 @@ in for importing the right module and setting up the toast master with the right
 
 ### Modules required in order to run this program
 1. `psutils`
+2. `win10toast`
+3. `gi`
+
+**Note** : The last module most probably should be present in most linux platforms.
 
 ### Not tested
 I don't own a Mac system(though I have always wanted to own a Macbook air), hence I have not been able to
