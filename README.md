@@ -32,6 +32,9 @@ presented an easier solution to the same.
 a notification can be shown in Windows as well as in Linux. Hence the platform specific code had to be put
 in for importing the right module and setting up the toast master with the right notification handler.
 
+### Modules required in order to run this program
+1. `psutils`
+
 ### Not tested
 I don't own a Mac system(though I have always wanted to own a Macbook air), hence I have not been able to
 test the program on a Mac. So, in case you have a Mac and want to use this program(this should not be required
